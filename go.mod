@@ -1,3 +1,3 @@
-module awm
+module acm
 
 go 1.26.1
