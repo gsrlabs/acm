@@ -85,7 +85,7 @@ func getJsonPath() string {
 		return jsonFileName
 	}
 	
-	configDir := filepath.Join(home, ".config", "awm")
+	configDir := filepath.Join(home, ".config", "acm")
 	
 	os.MkdirAll(configDir, 0755)
 	
