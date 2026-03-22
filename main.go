@@ -11,7 +11,6 @@ import (
 	"strings"
 )
 
-// Структура для хранения конфигурации
 type Config struct {
 	Name string `json:"name"`
 	Path string `json:"path"`
@@ -19,7 +18,6 @@ type Config struct {
 
 const jsonFileName = "awg_configs.json"
 
-// Цвета для красивого вывода в терминал
 const (
 	ColorReset  = "\033[0m"
 	ColorRed    = "\033[31m"
@@ -32,9 +30,8 @@ const (
 func main() {
 	configs := loadConfigs()
 
-	// Если список пуст, сразу предлагаем добавить конфиг
 	if len(configs) == 0 {
-		fmt.Println(ColorYellow + "Список конфигураций пуст. Давайте добавим первую." + ColorReset)
+		fmt.Println(ColorYellow + "The list of configurations is empty. Let's add the first one." + ColorReset)
 		addConfig(&configs)
 	}
 
@@ -43,27 +40,26 @@ func main() {
 	for {
 		clearScreen()
 		
-		// Показываем текущий статус, если есть конфиги
 		if len(configs) > 0 {
 			showAwgStatus()
 		}
 
-		fmt.Println(ColorCyan + "\n=== AmneziaWG Manager ===" + ColorReset)
+		fmt.Println(ColorCyan + "\n=== AmneziaWG CLI Manager ===" + ColorReset)
 		for i, cfg := range configs {
 			fmt.Printf("%s%d%s - %s (%s)\n", ColorGreen, i+1, ColorReset, cfg.Name, cfg.Path)
 		}
 		fmt.Println(ColorCyan + "-------------------------" + ColorReset)
-		fmt.Println(ColorYellow + "[+] - Добавить новый конфиг" + ColorReset)
-		fmt.Println(ColorRed + "[-] - Отключить ВСЕ соединения (down)" + ColorReset)
-		fmt.Println("[0] - Выход")
-		fmt.Print(ColorCyan + "\nВыберите действие: " + ColorReset)
+		fmt.Println(ColorYellow + "[+] - Add a new config" + ColorReset)
+		fmt.Println(ColorRed + "[-] - Disable connections (down)" + ColorReset)
+		fmt.Println("[0] - Exit")
+		fmt.Print(ColorCyan + "\nSelect an action: " + ColorReset)
 
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
 		switch input {
 		case "0":
-			fmt.Println("Выход из программы...")
+			fmt.Println("Exiting the program...")
 			return
 		case "+":
 			addConfig(&configs)
@@ -71,42 +67,34 @@ func main() {
 			disconnectAll(configs)
 			pause(reader)
 		default:
-			// Проверяем, ввел ли пользователь число
 			index, err := strconv.Atoi(input)
 			if err == nil && index > 0 && index <= len(configs) {
 				connect(configs[index-1])
 				pause(reader)
 			} else {
-				fmt.Println(ColorRed + "Неверный ввод, попробуйте снова." + ColorReset)
+				fmt.Println(ColorRed + "Incorrect input, please try again." + ColorReset)
 				pause(reader)
 			}
 		}
 	}
 }
 
-// ... (импорты те же, добавь "path/filepath")
-
 func getJsonPath() string {
-	// Получаем путь к домашней директории пользователя (например, /home/gsr)
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return jsonFileName // fallback на текущую директорию, если что-то пошло не так
+		return jsonFileName
 	}
 	
-	// Создаем путь ~/.config/awm/
 	configDir := filepath.Join(home, ".config", "awm")
 	
-	// Создаем папку, если её нет
 	os.MkdirAll(configDir, 0755)
 	
-	// Полный путь: /home/user/.config/awm/awg_configs.json
 	return filepath.Join(configDir, jsonFileName)
 }
 
-// Обновленная загрузка
 func loadConfigs() []Config {
 	var configs []Config
-	data, err := os.ReadFile(getJsonPath()) // Используем фиксированный путь
+	data, err := os.ReadFile(getJsonPath())
 	if err != nil {
 		return configs
 	}
@@ -114,13 +102,11 @@ func loadConfigs() []Config {
 	return configs
 }
 
-// Обновленное сохранение
 func saveConfigs(configs []Config) {
 	data, _ := json.MarshalIndent(configs, "", "  ")
-	os.WriteFile(getJsonPath(), data, 0644) // Используем фиксированный путь
+	os.WriteFile(getJsonPath(), data, 0644)
 }
 
-// Функция добавления нового конфига
 func addConfig(configs *[]Config) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -128,19 +114,19 @@ func addConfig(configs *[]Config) {
 		path, _ := reader.ReadString('\n')
 		path = strings.TrimSpace(path)
 
-		fmt.Print(ColorCyan + "Введите название конфига (например, Германия): " + ColorReset)
+		fmt.Print(ColorCyan + "Enter the absolute path to the configuration (example, Germany): " + ColorReset)
 		name, _ := reader.ReadString('\n')
 		name = strings.TrimSpace(name)
 
 		if path != "" && name != "" {
 			*configs = append(*configs, Config{Name: name, Path: path})
 			saveConfigs(*configs)
-			fmt.Println(ColorGreen + "Конфиг успешно добавлен!" + ColorReset)
+			fmt.Println(ColorGreen + "The config has been successfully added!" + ColorReset)
 		} else {
-			fmt.Println(ColorRed + "Путь и имя не могут быть пустыми." + ColorReset)
+			fmt.Println(ColorRed + "The path and name cannot be empty." + ColorReset)
 		}
 
-		fmt.Print(ColorYellow + "Хотите добавить еще один конфиг? Введите '+' (или 'Enter' чтобы вернуться в меню): " + ColorReset)
+		fmt.Print(ColorYellow + "Do you want to add another config? Enter '+' (or 'Enter' to return to the menu): " + ColorReset)
 		choice, _ := reader.ReadString('\n')
 		if strings.TrimSpace(choice) != "+" {
 			break
@@ -148,59 +134,52 @@ func addConfig(configs *[]Config) {
 	}
 }
 
-// Запуск awg-quick up
 func connect(cfg Config) {
-	fmt.Printf(ColorBlue+"\nПодключение к %s...\n"+ColorReset, cfg.Name)
+	fmt.Printf(ColorBlue+"\nConnection to %s...\n"+ColorReset, cfg.Name)
 	cmd := exec.Command("sudo", "awg-quick", "up", cfg.Path)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println(ColorRed+"Ошибка при подключении:", err, ColorReset)
+		fmt.Println(ColorRed+"Connection error:", err, ColorReset)
 	} else {
-		fmt.Println(ColorGreen + "Успешно подключено!" + ColorReset)
+		fmt.Println(ColorGreen + "Successfully connected!" + ColorReset)
 	}
 	
-	// После подключения показываем статус
-	fmt.Println(ColorYellow + "\nТекущий статус интерфейсов:" + ColorReset)
+	fmt.Println(ColorYellow + "\nCurrent status of interfaces:" + ColorReset)
 	showAwgStatus()
 }
 
-// Отключение всех конфигов циклом
 func disconnectAll(configs []Config) {
-	fmt.Println(ColorBlue + "\nОтключение всех конфигураций..." + ColorReset)
+	fmt.Println(ColorBlue + "\nDisabling all configurations..." + ColorReset)
 	for _, cfg := range configs {
-		fmt.Printf("Отключение %s (%s)...\n", cfg.Name, cfg.Path)
+		fmt.Printf("Disconnection %s (%s)...\n", cfg.Name, cfg.Path)
 		cmd := exec.Command("sudo", "awg-quick", "down", cfg.Path)
-		// Мы не перенаправляем stderr, чтобы не спамить ошибками, если интерфейс и так опущен
 		err := cmd.Run()
 		if err == nil {
-			fmt.Printf(ColorGreen+"%s отключен.\n"+ColorReset, cfg.Name)
+			fmt.Printf(ColorGreen+"%s disconnected.\n"+ColorReset, cfg.Name)
 		}
 	}
-	fmt.Println(ColorGreen + "Процесс отключения завершен." + ColorReset)
+	fmt.Println(ColorGreen + "The shutdown process is complete." + ColorReset)
 }
 
-// Выполнение sudo awg show
 func showAwgStatus() {
 	cmd := exec.Command("sudo", "awg", "show")
 	output, err := cmd.CombinedOutput()
 	if err != nil || len(string(output)) == 0 {
-		fmt.Println(ColorRed + "Активных AmneziaWG интерфейсов не найдено." + ColorReset)
+		fmt.Println(ColorRed + "No Active AmneziaWG interfaces found." + ColorReset)
 	} else {
 		fmt.Println(ColorBlue + string(output) + ColorReset)
 	}
 }
 
-// Очистка экрана (поддерживает Linux/macOS)
 func clearScreen() {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
 
-// Пауза перед очисткой экрана
 func pause(reader *bufio.Reader) {
-	fmt.Print(ColorYellow + "\nНажмите Enter для продолжения..." + ColorReset)
+	fmt.Print(ColorYellow + "\nPress Enter to continue..." + ColorReset)
 	reader.ReadString('\n')
 }
