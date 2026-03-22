@@ -30,7 +30,7 @@
 Самый простой способ установить `acm` — выполнить команду в терминале. Скрипт сам добавит PPA, обновит пакеты и скачает актуальный бинарник:
 
 ```bash
-curl -sSL [https://raw.githubusercontent.com/gsrlabs/acm/main/install.sh](https://raw.githubusercontent.com/gsrlabs/acm/main/install.sh) | sudo bash
+curl -sSL https://raw.githubusercontent.com/gsrlabs/acm/main/install.sh | sudo bash
 ```
 
 После завершения установки просто введите:
@@ -70,14 +70,15 @@ acm
 
 1.  Склонируйте репозиторий:
     ```bash
-    git clone [https://github.com/gsrlabs/acm.git](https://github.com/gsrlabs/acm.git)
+    git clone https://github.com/gsrlabs/acm.git
     ```
 2.  Соберите бинарник:
     ```bash
     go build -o acm main.go
     ```
 
----
+
+
 
 
 
