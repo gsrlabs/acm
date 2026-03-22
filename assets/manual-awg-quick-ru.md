@@ -7,7 +7,7 @@
 3. Выбери **«Экспорт конфигурации»** → **«AmneziaWG native format»** 
 4. Сохрани файл, например как `awg-v2.conf`.
 
-![](https://github.com/gsr/acm/raw/main/assets/screenshot_1.png)
+![Скриншот](screenshot_1.png)
 
 **Важно:**  
 - Никогда не используй «Поделиться» → `vpn://...` строку.  
