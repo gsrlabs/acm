@@ -110,7 +110,7 @@ func saveConfigs(configs []Config) {
 func addConfig(configs *[]Config) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print(ColorCyan + "Введите абсолютный путь к конфигу (например, /home/user/awg0.conf): " + ColorReset)
+		fmt.Print(ColorCyan + "Enter the absolute path to the configuration (example, /home/user/amnezia_for_awg.conf): " + ColorReset)
 		path, _ := reader.ReadString('\n')
 		path = strings.TrimSpace(path)
 
