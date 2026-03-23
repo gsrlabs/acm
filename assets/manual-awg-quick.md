@@ -1,8 +1,8 @@
 # How to properly use AmneziaWG 2.0 via console (awg-quick)
 
-### 1. How to get the correct native config from the admin panel / client
+### 1. Creating a configuration
 
-1. Open AmneziaVPN (legacy or new) → select the AmneziaWG 2.0 server.
+1. Open AmneziaVPN (legacy or new) → select the AmneziaWG.
 2. Click the gear icon ⚙️ next to the server.
 3. Select **“Export configuration”** → **“AmneziaWG native format”** 
 4. Save the file, for example as `awg-v2.conf`.
@@ -55,7 +55,7 @@ Endpoint = 111.11.111.111:45000
 PersistentKeepalive = 25
 ```
 
-### 3. Commands to start without acm (cheat sheet)
+### 3. Commands to start without acm (awg-quick)
 
 ```bash
 # 1. Fix permissions

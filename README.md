@@ -6,8 +6,6 @@
 
 **acm** is a lightweight and user-friendly CLI utility written in Go for managing your AmneziaWG (WireGuard) configurations directly in the terminal. Forget about manually typing long paths to config files — manage your connections through an interactive menu.
 
-[How to properly use AmneziaWG 2.0 via console](assets/manual-awg-quick.md)
-
 ---
 
 ## ✨ Key Features
@@ -44,6 +42,10 @@ acm
 ---
 
 ## 📖 How to Use
+
+### Preparing configs
+
+[How to get the correct native config](assets/manual-awg-quick.md)
 
 ### First Launch
 
