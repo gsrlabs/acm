@@ -63,6 +63,23 @@ If the configuration list is empty, the program will prompt you to add your firs
 
 ---
 
+## 🗑️ How to Uninstall the Utility
+To completely remove **acm** from the system, run:
+
+1. **Remove the binary:**
+   ```bash
+   sudo rm /usr/local/bin/acm
+   ```
+2. **Remove settings (optional):**
+   ```bash
+   rm -rf ~/.config/acm
+   ```
+3. **Remove dependencies (if no longer needed):**
+   ```bash
+   sudo apt purge amneziawg-tools
+   ```
+---
+
 ## ⚙️ Technical Details
 
   * **Configuration:** Your settings are stored in `~/.config/acm/awg_configs.json`. You can edit it manually if you need to quickly change paths.
