@@ -7,7 +7,6 @@ NC='\033[0m'
 
 echo -e "${YELLOW}=== Installing the AmneziaWG CLI Manager (acm) ===${NC}"
 
-# Проверка на root
 if [ "$EUID" -ne 0 ]; then
   echo -e "${RED}Error: Please run the installer as root.${NC}"
   echo -e "If you are using the one-liner, make sure to pipe to 'sudo bash'."
@@ -19,26 +18,23 @@ add-apt-repository -y ppa:amnezia/ppa
 
 echo -e "\n${GREEN}[2/3] Updating packages and installing dependencies...${NC}"
 apt update
-# Добавили curl в список установки, чтобы скачивание точно сработало
+
 apt install -y amneziawg-tools curl
 
 echo -e "\n${GREEN}[3/3] Downloading and installing the acm utility...${NC}"
 
 TARGET_PATH="/usr/local/bin/acm"
-# Ссылка на конкретный файл acm из твоего релиза v1.0.0
 DOWNLOAD_URL="https://github.com/gsrlabs/acm/releases/download/v1.0.0/acm"
 
 echo "Downloading from GitHub Releases..."
 curl -sSL "$DOWNLOAD_URL" -o "$TARGET_PATH"
 
-# Проверка, успешно ли скачался файл (проверяем, что файл существует и не пустой)
 if [ ! -s "$TARGET_PATH" ]; then
     echo -e "${RED}Error: Failed to download the 'acm' binary! Please check the release URL.${NC}"
     rm -f "$TARGET_PATH"
     exit 1
 fi
 
-# Выдаем права на выполнение
 chmod +x "$TARGET_PATH"
 
 echo -e "\n${GREEN}The installation has been completed successfully! 🎉${NC}"
