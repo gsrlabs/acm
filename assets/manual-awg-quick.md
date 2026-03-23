@@ -1,4 +1,3 @@
-```markdown
 # How to properly use AmneziaWG 2.0 via console (awg-quick)
 
 ### 1. How to get the correct native config from the admin panel / client
@@ -91,4 +90,3 @@ sudo systemctl enable --now awg-quick@wg0.service
 - After any config change — do `down + up`.
 - `I1` is the main obfuscation parameter. If it is present and correct — the protocol works in 2.0 mode.
 - `I2`–`I5` can be omitted entirely (they are optional). If you want to fill them in — you need real CPS packets in the format `<b 0x...>` or `<r X><b 0x...>`.
-```
